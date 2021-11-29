@@ -5,20 +5,23 @@ let timerId;
 
 stopButtonRef.setAttribute("disabled", "on");
 
-startButtonRef.addEventListener("click", () => {
-    timerId = setInterval(() => {
-        body.style.backgroundColor = getRandomHexColor();
-    }, 1000);
-    startButtonRef.setAttribute("disabled", "on");
-    stopButtonRef.removeAttribute("disabled");
-});
-
 function getRandomHexColor() {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 
+function changeButton (name1, name2) {
+    name1.setAttribute("disabled", "on");
+    name2.removeAttribute("disabled");
+}
+
+startButtonRef.addEventListener("click", () => {
+    timerId = setInterval(() => {
+        body.style.backgroundColor = getRandomHexColor();
+    }, 1000);
+    changeButton(startButtonRef, stopButtonRef);
+});
+
 stopButtonRef.addEventListener("click", () => {
     clearInterval(timerId);
-    startButtonRef.removeAttribute("disabled");
-    stopButtonRef.setAttribute("disabled", "on");
+    changeButton(stopButtonRef, startButtonRef);
 })
