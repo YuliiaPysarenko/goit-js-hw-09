@@ -4,14 +4,12 @@ import Notiflix from 'notiflix';
 
 const input = document.querySelector("#datetime-picker")
 const buttonRef = document.querySelector("button");
-const date = new Date();
 
 const days = document.querySelector("span[data-days]");
 const hours = document.querySelector("span[data-hours]");
 const minutes = document.querySelector("span[data-minutes]");
 const seconds = document.querySelector("span[data-seconds]");
 
-let timeNumber = 0;
 let timerId = null;
 
 buttonRef.setAttribute("disabled", "on");
@@ -19,11 +17,10 @@ buttonRef.setAttribute("disabled", "on");
 const options = {
     enableTime: true,
     time_24hr: true,
-    defaultDate: date,
+    defaultDate: new Date(),
     minuteIncrement: 1,
       onClose(selectedDates) {
-        timeNumber = selectedDates[0].getTime() - date.getTime();
-        if (selectedDates[0].getTime() < date.getTime()) {
+        if (selectedDates[0].getTime() < new Date().getTime()) {
             Notiflix.Notify.failure("Please choose a date in the future");
         }
         else {
@@ -34,8 +31,11 @@ const options = {
 
 function startTimer() {
     timerId = setInterval(() => {
-        let getTime = convertMs(timeNumber);
-        timeNumber -= 1000;
+        let date = new Date(input.value);
+        let time = date.getTime() - Date.now();
+        let getTime = convertMs(time);
+
+        time -= 1000;
         days.textContent = addLeadingZero(getTime.days);
         hours.textContent = addLeadingZero(getTime.hours);
         minutes.textContent = addLeadingZero(getTime.minutes);
